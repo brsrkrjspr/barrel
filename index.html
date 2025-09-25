@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Anniversary Baby</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Sans MS', cursive;
+            color: #ff69b4; /* Hot pink */
+            overflow: hidden;
+            background: linear-gradient(135deg, #ffe5ec, #ffc2d1, #ffb3c6, #ff8fab, #fb6f92); /* Your custom color gradient */
+            text-align: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Main content container with crystal effect */
+        .main-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        #message {
+            display: none;
+            opacity: 0;
+            background: rgba(0, 0, 0, 0.3); /* Dimmed overlay */
+        }
+
+        h1 {
+            font-size: 3em;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+            color: #ff1493;
+            font-weight: bold;
+        }
+
+        p {
+            font-size: 1.5em;
+            color: #222;
+            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
+            font-weight: 600;
+        }
+
+        button {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 1.2em;
+            background: rgba(255, 20, 147, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            background: rgba(255, 20, 147, 1);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .no-button {
+            position: fixed;
+            animation: bounce 2s infinite;
+            z-index: 150;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .heart {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: #ff69b4;
+            transform: rotate(-45deg);
+            animation: float 8s linear infinite; /* Slower animation */
+            z-index: 50;
+        }
+
+        .heart:before,
+        .heart:after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff69b4;
+            border-radius: 50%;
+        }
+
+        .heart:before {
+            top: -10px;
+            left: 0;
+        }
+
+        .heart:after {
+            left: 10px;
+            top: 0;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(-45deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-50px) rotate(-45deg); opacity: 0; }
+        }
+
+        /* Floating sparkles animation */
+        .sparkle {
+            position: fixed;
+            width: 15px;
+            height: 15px;
+            background: radial-gradient(circle, #ffff00, #ffff00 30%, transparent 30%);
+            border-radius: 50%;
+            animation: sparkle 4s linear infinite;
+            z-index: 30;
+        }
+
+        @keyframes sparkle {
+            0% { transform: translateY(0) scale(0); opacity: 1; }
+            50% { transform: translateY(-50vh) scale(1); opacity: 1; }
+            100% { transform: translateY(-100vh) scale(0); opacity: 0; }
+        }
+
+
+
+        #message-content {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 80%;
+            margin: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Modal styles with crystal effect */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            max-width: 80%;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+
+        #error-message {
+            display: none;
+        }
+
+        /* Enhanced text for crystal modal */
+        .modal-content p {
+            color: #222;
+            font-weight: 600;
+            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
+            font-size: 1.2em;
+        }
+
+        .modal-content button {
+            background: rgba(255, 20, 147, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .modal-content button:hover {
+            background: rgba(255, 20, 147, 1);
+            transform: scale(1.05);
+        }
+
+        #crying-cat {
+            font-size: 5em; /* Emoji as placeholder for GIF */
+        }
+
+        .crying-cat-gif {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+        }
+
+        .sad-image {
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+            display: block;
+            border-radius: 15px;
+            object-fit: cover;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Floating webp and gif elements - bigger size, confined area, draggable */
+        .floating-element {
+            position: fixed;
+            width: 150px;
+            height: 150px;
+            border-radius: 20px;
+            opacity: 0.9;
+            animation: floatElementConfined 16s linear infinite;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            z-index: 15;
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.2s ease;
+        }
+
+        .floating-element:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .floating-element:active {
+            cursor: grabbing;
+            transform: scale(1.1);
+            z-index: 20;
+        }
+
+        .floating-element.dragging {
+            animation: none;
+            z-index: 25;
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        @keyframes floatElementConfined {
+            0% { 
+                transform: translateY(80vh) translateX(0) rotate(0deg) scale(0.8); 
+                opacity: 0; 
+            }
+            10% { 
+                opacity: 0.9; 
+                transform: translateY(70vh) translateX(15px) rotate(12deg) scale(1); 
+            }
+            30% { 
+                transform: translateY(40vh) translateX(-20px) rotate(-15deg) scale(1.1); 
+            }
+            50% { 
+                transform: translateY(25vh) translateX(25px) rotate(20deg) scale(1); 
+            }
+            70% { 
+                transform: translateY(15vh) translateX(-15px) rotate(-10deg) scale(1.1); 
+            }
+            90% { 
+                opacity: 0.9; 
+                transform: translateY(5vh) translateX(30px) rotate(18deg) scale(0.9); 
+            }
+            100% { 
+                transform: translateY(-10vh) translateX(40px) rotate(25deg) scale(0.7); 
+                opacity: 0; 
+            }
+        }
+
+        /* Scattered static elements - bigger and in confined area, draggable */
+        .scattered-element {
+            position: fixed;
+            width: 120px;
+            height: 120px;
+            border-radius: 18px;
+            opacity: 0.8;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+            z-index: 12;
+            animation: gentleBob 4s ease-in-out infinite;
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.2s ease;
+        }
+
+        .scattered-element:hover {
+            transform: scale(1.05);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.4);
+        }
+
+        .scattered-element:active {
+            cursor: grabbing;
+            transform: scale(1.1);
+            z-index: 20;
+        }
+
+        .scattered-element.dragging {
+            animation: none;
+            z-index: 25;
+            transform: scale(1.1) rotate(-3deg);
+        }
+
+        @keyframes gentleBob {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+
+        /* Remove old photo rotator */
+        #photo-rotator {
+            display: none;
+        }
+
+        @keyframes photoRotate {
+            0% { background-image: url('6192920435549656758.jpg'); }
+            5.88% { background-image: url('6192920435549656741.jpg'); }
+            11.76% { background-image: url('6140819961103370480.jpg'); }
+            17.65% { background-image: url('6244464088960845196.jpg'); }
+            23.53% { background-image: url('6163614074097749688.jpg'); }
+            29.41% { background-image: url('6323285363136775703.jpg'); }
+            35.29% { background-image: url('6323285363136775699.jpg'); }
+            41.18% { background-image: url('6165614347741675559.jpg'); }
+            47.06% { background-image: url('6163362547927991057.jpg'); }
+            52.94% { background-image: url('6163362547927991054.jpg'); }
+            58.82% { background-image: url('6163362547927991055.jpg'); }
+            64.71% { background-image: url('6163362547927991053.jpg'); }
+            70.59% { background-image: url('6163362547927990939.jpg'); }
+            76.47% { background-image: url('6163362547927990947.jpg'); }
+            82.35% { background-image: url('6336664297932964351.jpg'); }
+            88.24% { background-image: url('6298645337623085092.jpg'); }
+            94.12% { background-image: url('6298645337623085018.jpg'); }
+            100% { background-image: url('6192920435549656758.jpg'); }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <h1>Happy Anniversary Baby</h1>
+        <p>Do you want to read my message for you?</p>
+        <button id="yes-btn">Yes</button>
+        <button id="no-btn">No</button>
+    </div>
+
+
+    <!-- Error Modal -->
+    <div id="error-modal" class="modal">
+        <div class="modal-content">
+            <p>You don't want to read my message</p>
+            <img src="webp/sad.webp" alt="Sad" class="sad-image">
+            <br><br>
+            <button id="close-error-btn">Close</button>
+        </div>
+    </div>
+
+    <script>
+        let noCount = 0;
+        const maxNo = 20;
+
+        // Drag functionality
+        function makeDraggable(element) {
+            let isDragging = false;
+            let startX, startY, initialX, initialY;
+            
+            element.addEventListener('mousedown', dragStart);
+            element.addEventListener('touchstart', dragStart, { passive: false });
+            
+            function dragStart(e) {
+                e.preventDefault();
+                isDragging = true;
+                element.classList.add('dragging');
+                
+                if (e.type === 'mousedown') {
+                    startX = e.clientX;
+                    startY = e.clientY;
+                } else {
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                }
+                
+                initialX = parseInt(element.style.left) || 0;
+                initialY = parseInt(element.style.top) || 0;
+                
+                document.addEventListener('mousemove', drag);
+                document.addEventListener('touchmove', drag, { passive: false });
+                document.addEventListener('mouseup', dragEnd);
+                document.addEventListener('touchend', dragEnd);
+            }
+            
+            function drag(e) {
+                if (!isDragging) return;
+                
+                e.preventDefault();
+                
+                let currentX, currentY;
+                if (e.type === 'mousemove') {
+                    currentX = e.clientX;
+                    currentY = e.clientY;
+                } else {
+                    currentX = e.touches[0].clientX;
+                    currentY = e.touches[0].clientY;
+                }
+                
+                let newX = initialX + (currentX - startX);
+                let newY = initialY + (currentY - startY);
+                
+                // Keep within viewport bounds
+                newX = Math.max(0, Math.min(newX, window.innerWidth - parseInt(element.style.width)));
+                newY = Math.max(0, Math.min(newY, window.innerHeight - parseInt(element.style.height)));
+                
+                element.style.left = newX + 'px';
+                element.style.top = newY + 'px';
+            }
+            
+            function dragEnd() {
+                isDragging = false;
+                element.classList.remove('dragging');
+                
+                document.removeEventListener('mousemove', drag);
+                document.removeEventListener('touchmove', drag);
+                document.removeEventListener('mouseup', dragEnd);
+                document.removeEventListener('touchend', dragEnd);
+            }
+        }
+
+        function createFloatingHearts() {
+            for (let i = 0; i < 5; i++) { // Reduced to 5 CSS hearts
+                let heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = Math.random() * 4 + 6 + 's'; // Slower: 6-10 seconds
+                heart.style.opacity = Math.random() * 0.5 + 0.5;
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 10000); // Remove after longer animation
+            }
+
+
+        }
+
+        // Add sparkles occasionally
+        function createSparkles() {
+            if (Math.random() < 0.4) { // 40% chance for sparkles
+                for (let j = 0; j < 3; j++) {
+                    let sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    sparkle.style.left = Math.random() * 100 + 'vw';
+                    sparkle.style.animationDelay = Math.random() * 2 + 's';
+                    document.body.appendChild(sparkle);
+                    setTimeout(() => sparkle.remove(), 4000);
+                }
+            }
+        }
+
+        // Create floating webp/gif elements in confined area
+        function createFloatingElements() {
+            const elements = [
+                'webp/4.webp',
+                'webp/crystal-amaru.webp', 
+                'gifs/haha-playing.gif',
+                'webp/peachandgoma.webp',
+                'webp/peachcat-cat.webp',
+                'webp/tkthao219-pearch.webp',
+                'webp/cat-kiss.webp',
+                'gifs/peach-and-goma.gif',
+                'gifs/zaza-zazaki.gif'
+            ];
+            
+            if (Math.random() < 0.4) { // 40% chance to create floating element
+                let element = document.createElement('div');
+                element.className = 'floating-element';
+                // Confine to left and right sides (avoid center where main content is)
+                let side = Math.random() < 0.5 ? 'left' : 'right';
+                if (side === 'left') {
+                    element.style.left = Math.random() * 25 + 'vw'; // Left 25% of screen
+                } else {
+                    element.style.left = (75 + Math.random() * 20) + 'vw'; // Right 20% of screen
+                }
+                element.style.backgroundImage = `url('${elements[Math.floor(Math.random() * elements.length)]}')`;
+                element.style.animationDelay = Math.random() * 3 + 's';
+                
+                // Make draggable
+                makeDraggable(element);
+                
+                document.body.appendChild(element);
+                setTimeout(() => element.remove(), 16000);
+            }
+        }
+
+        // Create all elements displayed on homepage
+        function createAllElements() {
+            const elements = [
+                'webp/4.webp',
+                'webp/crystal-amaru.webp', 
+                'gifs/haha-playing.gif',
+                'webp/peachandgoma.webp',
+                'webp/peachcat-cat.webp',
+                'webp/tkthao219-pearch.webp',
+                'webp/cat-kiss.webp',
+                'gifs/peach-and-goma.gif',
+                'gifs/zaza-zazaki.gif'
+            ];
+            
+            // Display all 9 elements - mix of scattered and floating
+            elements.forEach((elementFile, index) => {
+                // Create scattered static elements
+                let staticElement = document.createElement('div');
+                staticElement.className = 'scattered-element';
+                
+                // Distribute across left and right sides
+                if (index % 2 === 0) {
+                    // Left side positions
+                    staticElement.style.left = (5 + (index * 3)) + 'vw';
+                } else {
+                    // Right side positions
+                    staticElement.style.left = (75 + ((index - 1) * 3)) + 'vw';
+                }
+                staticElement.style.top = (15 + (index * 8)) + 'vh';
+                staticElement.style.backgroundImage = `url('${elementFile}')`;
+                staticElement.style.animationDelay = (index * 0.5) + 's';
+                
+                // Make draggable
+                makeDraggable(staticElement);
+                
+                document.body.appendChild(staticElement);
+                
+                // Also create some floating versions with delay
+                setTimeout(() => {
+                    let floatingElement = document.createElement('div');
+                    floatingElement.className = 'floating-element';
+                    floatingElement.style.left = (index % 2 === 0) ? 
+                        Math.random() * 25 + 'vw' : 
+                        (75 + Math.random() * 20) + 'vw';
+                    floatingElement.style.backgroundImage = `url('${elementFile}')`;
+                    floatingElement.style.animationDelay = Math.random() * 2 + 's';
+                    
+                    // Make draggable
+                    makeDraggable(floatingElement);
+                    
+                    document.body.appendChild(floatingElement);
+                    setTimeout(() => floatingElement.remove(), 16000);
+                }, index * 2000); // Stagger the floating elements
+            });
+        }
+
+        setInterval(createFloatingHearts, 400); // Generate hearts continuously (slower)
+        setInterval(createSparkles, 3000); // Generate sparkles every 3 seconds
+        
+        // Create all elements on page load
+        createAllElements();
+        
+        // Continue creating additional floating elements periodically
+        setInterval(createFloatingElements, 4000); // Generate additional floating elements every 4 seconds
+
+
+
+        document.getElementById('no-btn').onclick = function() {
+            noCount++;
+            if (noCount < maxNo) {
+                let newNo = document.createElement('button');
+                newNo.textContent = 'No';
+                newNo.className = 'no-button';
+                newNo.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+                newNo.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+                document.body.appendChild(newNo);
+                newNo.onclick = document.getElementById('no-btn').onclick; // Same behavior
+            } else {
+                document.getElementById('error-modal').style.display = 'block';
+            }
+        };
+
+        document.getElementById('yes-btn').onclick = function() {
+            window.location.href = 'mymess.html';
+        };
+
+
+
+        document.getElementById('close-error-btn').onclick = function() {
+            document.getElementById('error-modal').style.display = 'none';
+            // Reset no buttons and count
+            noCount = 0;
+            document.querySelectorAll('.no-button').forEach(btn => btn.remove());
+        };
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                if (event.target.id === 'error-modal') {
+                    noCount = 0;
+                    document.querySelectorAll('.no-button').forEach(btn => btn.remove());
+                }
+            }
+        };
+
+        // For Cinnamoroll characters: As CSS graphics are complex, use placeholders or add images similarly.
+        // For background music (optional): Add <audio autoplay loop> with src="data:audio/mp3;base64,..." in body, but commented out.
+        // <!-- <audio autoplay loop><source src="data:audio/mp3;base64,..." type="audio/mp3"></audio> -->
+
+        // Adjust animation timings in CSS @keyframes if needed
+    </script>
+</body>
+</html> 

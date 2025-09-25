@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Messages For You</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Sans MS', cursive;
+            color: #ff69b4;
+            overflow-x: hidden;
+            background: linear-gradient(to bottom, #ffb6c1, #add8e6);
+            min-height: 100vh;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Background bubble images - clearer and more visible */
+        .background-image {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            z-index: 1;
+            animation: bubbleEffect 5s ease-in-out;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            border: 3px solid rgba(255, 255, 255, 0.6);
+        }
+
+        @keyframes bubbleEffect {
+            0% { 
+                opacity: 0; 
+                transform: scale(0.3) translateY(50px);
+                filter: blur(5px);
+            }
+            20% { 
+                opacity: 0.9; 
+                transform: scale(1) translateY(0);
+                filter: blur(0px);
+            }
+            80% { 
+                opacity: 0.9; 
+                transform: scale(1) translateY(0);
+                filter: blur(0px);
+            }
+            100% { 
+                opacity: 0; 
+                transform: scale(1.3) translateY(-50px);
+                filter: blur(3px);
+            }
+        }
+
+        /* Modal styles with crystal effect */
+        .modal {
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 25px;
+            max-width: 80%;
+            max-height: 80%;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            text-align: left;
+            color: #333;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 30px;
+            color: #ff1493;
+            cursor: pointer;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: #ff69b4;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+            margin-bottom: 30px;
+            color: #ff1493;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .message-content {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #222;
+            margin: 20px 0;
+            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        .signature {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 1.3em;
+            color: #ff1493;
+            font-weight: bold;
+            border-top: 2px solid #ff69b4;
+            padding-top: 20px;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #ff1493;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Comic Sans MS', cursive;
+            font-size: 1em;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 200;
+        }
+
+        .back-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Small floating photos */
+        .floating-photo {
+            position: fixed;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: floatSmall 12s linear infinite;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 500;
+        }
+
+        @keyframes floatSmall {
+            0% { 
+                transform: translateY(100vh) translateX(0) rotate(0deg) scale(0.5); 
+                opacity: 0; 
+            }
+            10% { 
+                opacity: 0.6; 
+                transform: translateY(90vh) translateX(20px) rotate(15deg) scale(0.8); 
+            }
+            50% { 
+                transform: translateY(50vh) translateX(-30px) rotate(-20deg) scale(1); 
+            }
+            90% { 
+                opacity: 0.6; 
+                transform: translateY(10vh) translateX(40px) rotate(25deg) scale(0.7); 
+            }
+            100% { 
+                transform: translateY(-80px) translateX(60px) rotate(30deg) scale(0.3); 
+                opacity: 0; 
+            }
+        }
+
+        /* Floating hearts */
+        .heart {
+            position: fixed;
+            width: 15px;
+            height: 15px;
+            background: #ff69b4;
+            transform: rotate(-45deg);
+            animation: float 8s linear infinite;
+            z-index: 501;
+        }
+
+        .heart:before,
+        .heart:after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #ff69b4;
+            border-radius: 50%;
+        }
+
+        .heart:before {
+            top: -7px;
+            left: 0;
+        }
+
+        .heart:after {
+            left: 7px;
+            top: 0;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(-45deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-50px) rotate(-45deg); opacity: 0; }
+        }
+
+        /* Floating sparkles */
+        .sparkle {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle, #ffff00, #ffff00 30%, transparent 30%);
+            border-radius: 50%;
+            animation: sparkle 5s linear infinite;
+            z-index: 502;
+        }
+
+        @keyframes sparkle {
+            0% { transform: translateY(100vh) scale(0); opacity: 1; }
+            50% { transform: translateY(50vh) scale(1); opacity: 1; }
+            100% { transform: translateY(-50px) scale(0); opacity: 0; }
+        }
+
+        /* Envelope styles */
+        .envelope-modal {
+            max-width: 500px;
+        }
+
+        .envelope {
+            position: relative;
+            width: 400px;
+            height: 300px;
+            margin: 20px auto;
+            background: linear-gradient(135deg, #f8f8f8, #e8e8e8);
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, #ffb3ba, #ffdfba);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .envelope-body {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ffe5ec, #ffc2d1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .envelope-content {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .envelope-content h2 {
+            color: #ff1493;
+            margin: 0 0 15px 0;
+            font-size: 1.8em;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .envelope-content p {
+            color: #333;
+            margin: 0 0 20px 0;
+            font-size: 1.1em;
+        }
+
+        .password-section {
+            margin-top: 20px;
+        }
+
+        .password-section label {
+            display: block;
+            color: #ff1493;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .password-section input {
+            width: 200px;
+            padding: 10px;
+            border: 2px solid #ff69b4;
+            border-radius: 10px;
+            font-size: 1em;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            margin-bottom: 10px;
+        }
+
+        .password-section input:focus {
+            outline: none;
+            border-color: #ff1493;
+            box-shadow: 0 0 10px rgba(255, 20, 147, 0.3);
+        }
+
+        .password-hint {
+            font-size: 0.9em;
+            color: #666;
+            margin: 5px 0 15px 0;
+            font-style: italic;
+        }
+
+        .password-section button {
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 20, 147, 0.3);
+        }
+
+        .password-section button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 20, 147, 0.4);
+        }
+
+        .error-message {
+            color: #ff4757;
+            font-size: 0.9em;
+            margin-top: 10px;
+            display: none;
+            font-weight: bold;
+        }
+
+        /* Message modal specific styles */
+        .message-content-modal {
+            max-width: 80%;
+            max-height: 80%;
+            width: auto;
+            height: auto;
+            margin: auto;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        #message-modal .modal {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+
+        #message-modal {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+
+    <button class="back-button" onclick="window.location.href='index.html'">← Back to Home</button>
+
+    <!-- Envelope Interface -->
+    <div id="envelope-container" class="modal">
+        <div class="modal-content envelope-modal">
+            <span class="close-btn" onclick="window.location.href='index.html'">&times;</span>
+            
+            <div class="envelope">
+                <div class="envelope-flap"></div>
+                <div class="envelope-body">
+                    <div class="envelope-content">
+                        <h2>💌 Love Letter 💌</h2>
+                        <p>This letter is protected by our special date</p>
+                        
+                        <div class="password-section">
+                            <label for="password">Enter Password:</label>
+                            <input type="password" id="password" placeholder="Enter date (MMDDYY)" maxlength="6">
+                            <div class="password-hint">💡 Hint: The Day you said YES to me</div>
+                            <button id="unlock-btn" onclick="unlockLetter()">Open Letter</button>
+                            <div id="error-msg" class="error-message">Incorrect password. Try again! 💕</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Modal (hidden initially) -->
+    <div id="message-modal" class="modal" style="display: none;">
+        <div class="modal-content message-content-modal">
+            <span class="close-btn" onclick="window.location.href='index.html'">&times;</span>
+            
+            <h1>💕 My Love Letter To You 💕</h1>
+            
+            <div class="message-content">
+                <p><strong>My Dearest Love,</strong></p>
+                
+                <p>Hi babyyy, i can't believe na it's been a year na mag bf/gf tayo. Honestly, I don't know what i did to deserve someone like you baby, but I'm grateful every single day.  
+                    Before i met you, i was just going through the motions. But you changed everything. You made me want to be better, and somehow you love me exactly as i am.</p>
+                
+                <p>I keep thinking about all our favorite moments together. Like when we first met at Sm. I still remember your smile that day we met, 
+                    how you hold my hand, and how you tap my head because "Ang Liit mo pala". 
+                    And our first date? i feel so nervous about it, becuase i was thinking na baka mag taka ka bat ang liit liit ko HAHAHAH. 
+                    but you made everything feel so easy and natural hindi ka ang dalawang isip na e hug agad ako.</p>
+                
+                <p>It's been 1 year already. When i look back at where we started and see where we are now, nakaka bilib lang kasi tumatagal tayo ng ganto. 
+                    We've been through so much together like pumunta sa simbahan at mag simba, nood ng sine with my favorite anime, 
+                    and pumunta sa birthday mo at makilala buong family mo. Minsan di lang din puro ganyan kasasaya ang nangyayayare like we broke up for a few days. 
+                    Hindi ako magsisinungaling, I was completely lost and heartbroken *iyak ng iyak gabi gabi*. I don't know what to do with myself, 
+                    but i knew I had to give you time you needed to think. When you can back, it meant everything to me. It showed me how much we both really wanted this to work.</p>
+                
+                <p>I love how we've grown together but still kept what make us. You're still the same amazing person I fell for, 
+                    but somehow I discover new things to love about you all the time. This anniversary isn't just about the time that's passed. It's about all the how our love just keeps getting deeper. 
+                    I only promise that i will always be at your side, to love, to support you every single time. I can't wait to see what the next 10? 50? 100? forever? years bring us.</p>
+                
+                <p>I love our life together - even the crazy parts, even the hard days. It's all worth it because it's with you.</p>
+                
+                <p style="text-align: center; margin-top: 30px; font-size: 1.2em;"><strong>Happy anniversary, Babyy. I love you more than you know. ❤️</strong></p>
+            </div>
+
+            <div class="signature">
+                With All My Love Forever,<br>
+                💕 Jasper 💕<br>
+                <small>On Our Special Anniversary</small>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Array of your couple photos
+        const photos = [
+            'images/6192920435549656758.jpg', 'images/6192920435549656741.jpg', 'images/6140819961103370480.jpg',
+            'images/6244464088960845196.jpg', 'images/6163614074097749688.jpg', 'images/6323285363136775703.jpg',
+            'images/6323285363136775699.jpg', 'images/6165614347741675559.jpg', 'images/6163362547927991057.jpg',
+            'images/6163362547927991054.jpg', 'images/6163362547927991055.jpg', 'images/6163362547927991053.jpg',
+            'images/6163362547927990939.jpg', 'images/6163362547927990947.jpg', 'images/6336664297932964351.jpg',
+            'images/6298645337623085092.jpg', 'images/6298645337623085018.jpg'
+        ];
+
+        let currentPhotoIndex = 0;
+
+        // Create bubble background images
+        function createBubbleImage() {
+            let backgroundImage = document.createElement('div');
+            backgroundImage.className = 'background-image';
+            
+            // Random position
+            backgroundImage.style.left = Math.random() * (window.innerWidth - 300) + 'px';
+            backgroundImage.style.top = Math.random() * (window.innerHeight - 300) + 'px';
+            
+            // Set current photo
+            backgroundImage.style.backgroundImage = `url('${photos[currentPhotoIndex]}')`;
+            
+            // Move to next photo
+            currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+            
+            document.body.appendChild(backgroundImage);
+            
+            // Remove after animation completes
+            setTimeout(() => backgroundImage.remove(), 5000);
+        }
+
+        // Create small floating photos
+        function createFloatingPhotos() {
+            if (Math.random() < 0.4) { // 40% chance to create floating photo
+                let photo = document.createElement('div');
+                photo.className = 'floating-photo';
+                photo.style.left = Math.random() * 90 + 'vw';
+                photo.style.backgroundImage = `url('${photos[Math.floor(Math.random() * photos.length)]}')`;
+                photo.style.animationDelay = Math.random() * 3 + 's';
+                document.body.appendChild(photo);
+                setTimeout(() => photo.remove(), 12000);
+            }
+        }
+
+        // Create floating hearts
+        function createFloatingHearts() {
+            for (let i = 0; i < 10; i++) {
+                let heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = Math.random() * 3 + 6 + 's';
+                heart.style.opacity = Math.random() * 0.4 + 0.4;
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 9000);
+            }
+        }
+
+        // Create floating sparkles
+        function createSparkles() {
+            if (Math.random() < 0.3) {
+                for (let j = 0; j < 2; j++) {
+                    let sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    sparkle.style.left = Math.random() * 100 + 'vw';
+                    sparkle.style.animationDelay = Math.random() * 2 + 's';
+                    document.body.appendChild(sparkle);
+                    setTimeout(() => sparkle.remove(), 5000);
+                }
+            }
+        }
+
+        // Add some Cinnamoroll elements
+        function createCinnamoroll() {
+            if (Math.random() < 0.2) {
+                let cinnamoroll = document.createElement('div');
+                cinnamoroll.style.position = 'fixed';
+                cinnamoroll.style.left = Math.random() * 90 + 'vw';
+                cinnamoroll.style.fontSize = '25px';
+                cinnamoroll.style.zIndex = '503';
+                cinnamoroll.innerHTML = '🐶';
+                cinnamoroll.style.animation = 'float 7s linear infinite';
+                document.body.appendChild(cinnamoroll);
+                setTimeout(() => cinnamoroll.remove(), 7000);
+            }
+        }
+
+        // Start all animations
+        setInterval(createBubbleImage, 5000);     // Create bubble image every 5 seconds
+        setInterval(createFloatingPhotos, 2000);  // Every 2 seconds
+        setInterval(createFloatingHearts, 400);   // Every 0.4 seconds
+        setInterval(createSparkles, 3000);        // Every 3 seconds
+        setInterval(createCinnamoroll, 5000);     // Every 5 seconds
+
+        // Initial burst of elements
+        createBubbleImage(); // Start with first bubble
+        createFloatingPhotos();
+        createFloatingHearts();
+        createSparkles();
+
+        // Password unlock functionality
+        function unlockLetter() {
+            const password = document.getElementById('password').value;
+            const correctPassword = '092524'; // The day she said yes to me
+            const errorMsg = document.getElementById('error-msg');
+            
+            if (password === correctPassword) {
+                // Hide envelope container
+                document.getElementById('envelope-container').style.display = 'none';
+                // Show message modal with proper centering
+                const messageModal = document.getElementById('message-modal');
+                messageModal.style.display = 'flex';
+                messageModal.style.justifyContent = 'center';
+                messageModal.style.alignItems = 'center';
+            } else {
+                // Show error message
+                errorMsg.style.display = 'block';
+                // Clear password field
+                document.getElementById('password').value = '';
+                // Hide error after 3 seconds
+                setTimeout(() => {
+                    errorMsg.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // Allow Enter key to submit password
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                unlockLetter();
+            }
+        });
+    </script>
+</body>
+</html> 
